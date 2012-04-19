@@ -428,6 +428,20 @@ move_modules(l4util_mb_info_t *mbi, unsigned long modaddr)
       return;
     }
 
+  // HH: It seems that mbi->mods_addr doesn't necessarily to be sorted, let's sorted to avoid memory corruption before an upstream fix.
+  // Don't touch the first three as they are kernel sigma0 and roottask..
+  for (unsigned j = roottask_module + 1; j < mbi->mods_count; ++j) {
+    l4util_mb_mod_t *entry_j =(L4_MB_MOD_PTR(mbi->mods_addr)) + j;
+    for (unsigned k = j + 1; k < mbi->mods_count; ++k) {
+      l4util_mb_mod_t *entry_k =(L4_MB_MOD_PTR(mbi->mods_addr)) + k;
+      if (entry_k->mod_start < entry_j->mod_start) {
+        l4util_mb_mod_t tmp = *entry_j;
+        *entry_j = *entry_k;
+        *entry_k = tmp;
+      } 
+    }
+  }
+
   printf("  Moving %d modules to %lx with offset %lx\n",
          mbi->mods_count, modaddr, offset);
 
