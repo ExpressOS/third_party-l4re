@@ -38,7 +38,7 @@ $(if $(ROLE),$(OBJ_DIR)/.general.d: $(L4DIR)/mk/$(ROLE))
 SYSTEM_TARGET_arm     = arm-linux-
 SYSTEM_TARGET_ppc32   = powerpc-linux-
 SYSTEM_TARGET_sparc   = sparc-elf-
-SYSTEM_TARGET         = $(SYSTEM_TARGET_$(ARCH))
+SYSTEM_TARGET         ?= $(SYSTEM_TARGET_$(ARCH))
 
 CARCHFLAGS_amd64    = -mno-red-zone
 ASFLAGS_amd64       = -m64

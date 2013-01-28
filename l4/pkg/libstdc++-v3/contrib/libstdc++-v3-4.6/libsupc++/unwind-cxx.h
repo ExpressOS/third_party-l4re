@@ -39,6 +39,18 @@
 
 #pragma GCC visibility push(default)
 
+// HH: For GCC 4.7
+#ifdef __ARM_EABI_UNWINDER__
+extern "C" {
+
+static inline _Unwind_Word _Unwind_decode_target2(_Unwind_Word ptr)
+{
+  return _Unwind_decode_typeinfo_ptr(0, ptr);
+}
+}
+#endif
+
+
 namespace __cxxabiv1
 {
 
